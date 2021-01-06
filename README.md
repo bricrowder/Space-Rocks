@@ -1,2 +1,7 @@
 # Space-Rocks
-Basic game framework with menu, asteroids like demo game, gameplay pause and high-score list.
+
+## In Progress:
+- All of it!
+
+## Complete:
+- None of it!
