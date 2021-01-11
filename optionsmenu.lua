@@ -16,7 +16,7 @@ function optionsmenu.init()
     m.index = 1
 
     -- start angle for volume dial
-    m.angle = (math.pi - math.pi/8) + math.pi/8 * config.sounds.volume
+    m.angle = (math.pi - math.pi/8) + math.pi/8 * config.sounds.volume * 10
 
     -- offset for dial and size slider drawing
     m.offset = {
@@ -82,7 +82,7 @@ function optionsmenu:keypressed(key)
             config.sounds.volume = 0
         end
 
-        self.angle = (math.pi - math.pi/8) + math.pi/8 * config.sounds.volume*10
+        self.angle = (math.pi - math.pi/8) + math.pi/8 * config.sounds.volume * 10
 
         love.audio.setVolume(config.sounds.volume)
 
@@ -107,7 +107,7 @@ function optionsmenu:keypressed(key)
         end
     elseif key == "escape" then
         -- main menu
-        menu = "main"    
+        menu = "main"
     end
 end
 

@@ -55,7 +55,13 @@ function love.update(dt)
 
         else
             -- if game is paused
-            pausemenu:update(dt)
+            if menu == "options" then
+                optionsmenu:update(dt)
+            elseif menu == "controls" then
+                controlsmenu:update(dt)
+            else
+                pausemenu:update(dt)
+            end
         end
 
         if endgame then
@@ -84,10 +90,16 @@ function love.draw()
 
         if not paused then
             -- game code
-            love.graphics.print("Press Escape to Quit", virtualCanvas:getWidth()/2 - 20, virtualCanvas:getHeight()/2)
+            love.graphics.print("Press Escape to Quit", nativeCanvas:getWidth()/2 - 20, nativeCanvas:getHeight()/2)
         else
             -- if game is paused
-            pausemenu:draw()
+            if menu == "options" then
+                optionsmenu:draw()
+            elseif menu == "controls" then
+                controlsmenu:draw()
+            else
+                pausemenu:draw()
+            end
         end
 
         if endgame then
@@ -120,7 +132,7 @@ function love.draw()
     if debugstats then
         love.graphics.setFont(debugfont)
         local stats = love.graphics.getStats()
-        love.graphics.print("Draws: " .. stats.drawcalls .. "\nGfx Mem: " .. string.format("%.2f",stats.texturememory/1024/1024), 10, love.graphics.getHeight() - 40)
+        love.graphics.print("Draws: " .. stats.drawcalls .. "\nGfx Mem: " .. string.format("%.2f",stats.texturememory/1024/1024) .. "\nVolume: " .. config.sounds.volume, 10, love.graphics.getHeight() - 40)
     end
 end
 
@@ -134,7 +146,15 @@ function love.keypressed(key)
             -- game code
         else
             -- if game is paused
-            pausemenu:keypressed(key)
+            love.audio.play(menubip)
+            if menu == "options" then
+                optionsmenu:keypressed(key)
+            elseif menu == "controls" then
+                controlsmenu:keypressed(key)
+            else
+                pausemenu:keypressed(key)
+            end
+
         end
 
         if endgame then
