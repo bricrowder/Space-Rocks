@@ -34,15 +34,15 @@
             {
                 "x1":170,
                 "x2":284,
-                "y":110
+                "y":120
             },{
                 "x1":170,
                 "x2":284,
-                "y":160
+                "y":155
             },{
                 "x1":170,
                 "x2":284,
-                "y":200
+                "y":190
             }
         ]
     },
@@ -85,6 +85,100 @@
                 "x1":180,
                 "x2":275,
                 "y":215
+            }
+        ],
+        "panel":{
+            "x":48,
+            "y":80,
+            "w":384,
+            "h":128
+        },
+        "rows":{
+            "h":16,
+            "y":80,
+            "count":8
+        },
+        "columns":[
+            {
+                "x":48,
+                "w":96
+            },
+            {
+                "x":144,
+                "w":48
+            },
+            {
+                "x":192,
+                "w":48
+            },
+            {
+                "x":240,
+                "w":48
+            },
+            {
+                "x":288,
+                "w":48
+            },
+            {
+                "x":336,
+                "w":48
+            },
+            {
+                "x":384,
+                "w":48
+            }
+
+        ]
+    },
+    "controls":{
+        "kb":{
+            "up":"w",
+            "down":"s",
+            "left":"a",
+            "right":"d",
+            "jump":"space",
+            "menu":"escape",
+            "ok":"space"
+        },
+        "mouse":{
+            "ok":1
+        },
+        "gamepad":[
+            {
+                "up":"dpup",
+                "down":"dpdown",
+                "left":"dpleft",
+                "right":"dpright",
+                "jump":"a",
+                "menu":"start",
+                "ok":"a"    
+            },
+            {
+                "up":"dpup",
+                "down":"dpdown",
+                "left":"dpleft",
+                "right":"dpright",
+                "jump":"a",
+                "menu":"start",
+                "ok":"a"   
+            },
+            {
+                "up":"dpup",
+                "down":"dpdown",
+                "left":"dpleft",
+                "right":"dpright",
+                "jump":"a",
+                "menu":"start",
+                "ok":"a"   
+            },
+            {
+                "up":"dpup",
+                "down":"dpdown",
+                "left":"dpleft",
+                "right":"dpright",
+                "jump":"a",
+                "menu":"start",
+                "ok":"a"   
             }
         ]
     }

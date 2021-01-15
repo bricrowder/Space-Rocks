@@ -93,6 +93,7 @@ function optionsmenu:keypressed(key)
             config.sounds.volume = 1
         end
 
+        -- angle of dial sprite
         self.angle = (math.pi - math.pi/8) + math.pi/8 * config.sounds.volume*10
 
         love.audio.setVolume(config.sounds.volume)

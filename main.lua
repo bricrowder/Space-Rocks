@@ -1,5 +1,5 @@
 -- load json code modules
-json = require "dkjson"
+json = require ("external/dkjson")
 
 -- load the configuration
 config = json.opendecode("config/config.json")
@@ -9,10 +9,10 @@ nativeCanvas = love.graphics.newCanvas(config.game.width, config.game.height)
 virtualCanvas = love.graphics.newCanvas(config.game.width * config.game.scale, config.game.height * config.game.scale)
 
 -- load the menus/screens
-mainmenu = require ("mainmenu").init()
-pausemenu = require ("pausemenu").init()
-optionsmenu = require ("optionsmenu").init()
-controlsmenu = require ("controlsmenu").init()
+mainmenu = require ("screens/mainmenu").init()
+pausemenu = require ("screens/pausemenu").init()
+optionsmenu = require ("screens/optionsmenu").init()
+controlsmenu = require ("screens/controlsmenu").init()
 
 -- initialize global game state variables
 game = false        -- if game is playing or not, it is the menu otherwise really...
