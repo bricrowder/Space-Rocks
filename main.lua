@@ -26,14 +26,15 @@ debugstats = true
 -- debug font
 debugfont = love.graphics.newFont(12)
 
-
 -- Audio files
 menubip = love.audio.newSource(config.sounds.menubip, "static")
 
---[[
-LOAD ALL OTHER GLOBAL VARIABLES AND MODULES HERE
-]]
+-- gamepad/joysticks - 1 to 4
+gamepads = {nil, nil, nil, nil}
 
+--[[
+    LOAD ALL OTHER GLOBAL VARIABLES AND MODULES HERE
+]]
 
 function love.load()
     -- set the resolution from the configuration
@@ -136,6 +137,7 @@ function love.draw()
     end
 end
 
+-- handle keyboard events
 function love.keypressed(key)
     if game then
         -- game code regardless of pausing
@@ -162,6 +164,7 @@ function love.keypressed(key)
         end
     else
         -- play menu moving sound
+        
         love.audio.play(menubip)
         -- menu code
         if menu == "main" then
@@ -172,6 +175,30 @@ function love.keypressed(key)
             controlsmenu:keypressed(key)
         end
     end
+end
+
+-- handle gamepad/joystick events
+function love.gamepadpressed(js, button)
+    local key = nil
+    
+    -- find button in gamepad #1 control settings
+    -- gotta figure out how to do multiple players
+    for i, v in ipairs(config.controls[4]) do
+        if button == v then
+            key = config.controls[config.controlindex.kb][i]
+        end
+    end
+    print(button .. " --> " .. key)
+    love.keypressed(key)
+end
+
+
+function love.joystickadded(js)
+    print("added: " .. js:getName())
+end
+
+function love.joystickremoved(js)
+    print("removed: " .. js:getName())    
 end
 
 function resetVirtualCanvas()

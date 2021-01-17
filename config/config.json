@@ -87,6 +87,12 @@
                 "y":215
             }
         ],
+        "colours":{
+            "row":[0.1,0.1,0.1,0.25],
+            "cell":[0,0.1,0.1,0.25],
+            "text":[0,0,0,1],
+            "edit":[0.7,0.1,0.1,0.25]
+        },
         "panel":{
             "x":48,
             "y":80,
@@ -96,7 +102,7 @@
         "rows":{
             "h":16,
             "y":80,
-            "count":8
+            "count":7
         },
         "columns":[
             {
@@ -130,56 +136,28 @@
 
         ]
     },
-    "controls":{
-        "kb":{
-            "up":"w",
-            "down":"s",
-            "left":"a",
-            "right":"d",
-            "jump":"space",
-            "menu":"escape",
-            "ok":"space"
-        },
-        "mouse":{
-            "ok":1
-        },
-        "gamepad":[
-            {
-                "up":"dpup",
-                "down":"dpdown",
-                "left":"dpleft",
-                "right":"dpright",
-                "jump":"a",
-                "menu":"start",
-                "ok":"a"    
-            },
-            {
-                "up":"dpup",
-                "down":"dpdown",
-                "left":"dpleft",
-                "right":"dpright",
-                "jump":"a",
-                "menu":"start",
-                "ok":"a"   
-            },
-            {
-                "up":"dpup",
-                "down":"dpdown",
-                "left":"dpleft",
-                "right":"dpright",
-                "jump":"a",
-                "menu":"start",
-                "ok":"a"   
-            },
-            {
-                "up":"dpup",
-                "down":"dpdown",
-                "left":"dpleft",
-                "right":"dpright",
-                "jump":"a",
-                "menu":"start",
-                "ok":"a"   
-            }
-        ]
-    }
+    "controlindex":{
+        "kb":2,
+        "mouse":3,
+        "gamepad1":4,
+        "gamepad2":5,
+        "gamepad3":6,
+        "gamepad4":7,
+        "up":1,
+        "down":2,
+        "left":3,
+        "right":4,
+        "jump":5,
+        "menu":6,
+        "ok":7
+    },
+    "controls":[
+        ["Up","Down","Left","Right","Jump","Menu/Back","Ok"],
+        ["w","s","a","d","space","escape","space"],
+        [null,null,null,null,null,null,null],
+        ["dpup","dpdown","dpleft","dpright","a","start","a"],
+        ["dpup","dpdown","dpleft","dpright","a","start","a"],
+        ["dpup","dpdown","dpleft","dpright","a","start","a"],
+        ["dpup","dpdown","dpleft","dpright","a","start","a"]
+    ]
 }

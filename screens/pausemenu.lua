@@ -27,20 +27,23 @@ function pausemenu:draw()
 end
 
 function pausemenu:keypressed(key)
-    if key == "down" then
+    local cc = config.controls
+    local ci = config.controlindex
+
+    if key == cc[ci.kb][ci.down] then
         self.index = self.index + 1
         if self.index > #config.pausemenu.menuoptions then
             self.index = 1
         end
-    elseif key == "up" then
+    elseif key == cc[ci.kb][ci.up]then
         self.index = self.index - 1
         if self.index < 1 then
             self.index = #config.pausemenu.menuoptions
         end
-    elseif key == "escape" then
+    elseif key == cc[ci.kb][ci.menu] then
         -- return to game
         paused = false
-    elseif key == "space" then
+    elseif key == cc[ci.kb][ci.ok] then
         if self.index == 1 then
             -- return to game
             paused = false

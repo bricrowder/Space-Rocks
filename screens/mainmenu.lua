@@ -27,17 +27,20 @@ function mainmenu:draw()
 end
 
 function mainmenu:keypressed(key)
-    if key == "down" then
+    local cc = config.controls
+    local ci = config.controlindex
+
+    if key == cc[ci.kb][ci.down] then
         self.index = self.index + 1
         if self.index > #config.mainmenu.menuoptions then
             self.index = 1
         end
-    elseif key == "up" then
+    elseif key == cc[ci.kb][ci.up] then
         self.index = self.index - 1
         if self.index < 1 then
             self.index = #config.mainmenu.menuoptions
         end
-    elseif key == "space" then
+    elseif key == cc[ci.kb][ci.ok] then
         if self.index == 1 then
             -- new game
             game = true

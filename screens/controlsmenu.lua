@@ -10,9 +10,13 @@ function controlsmenu.init()
     m.background = love.graphics.newImage(config.controlsmenu.background)
     m.indicator = love.graphics.newImage(config.controlsmenu.indicator)
 
-    -- index of current menu and column for this specific menu
+    -- index of action
     m.index = 1
+    -- index of device
     m.colindex = 2
+
+    -- if the control is being edited / looking for input
+    m.edit = false
 
     return m
 end
@@ -22,104 +26,98 @@ function controlsmenu:update(dt)
 end
 
 function controlsmenu:draw()
+    local cm = config.controlsmenu
+    local cc = config.controls
+
+    -- draw background
     love.graphics.draw(self.background, 0, 0)
-    local c = config.controlsmenu
 
-    if self.index < config.controlsmenu.rows.count + 1 then
-        local x = c.panel.x
-        local y = c.rows.y + (self.index - 1) * c.rows.h
-        love.graphics.setColor(0.1,0.1,0.1,0.25)
-        love.graphics.rectangle("fill", x, y, c.panel.w, c.rows.h)
+    -- draw row/column highlights
+    if self.index < cm.rows.count + 1 then
+        -- calc row position
+        local y = cm.rows.y + (self.index - 1) * cm.rows.h
+        love.graphics.setColor(cm.colours.row)
+        love.graphics.rectangle("fill", cm.panel.x, y, cm.panel.w, cm.rows.h)
 
-        love.graphics.setColor(0,0.1,0.1,0.25)
-        local colx = config.controlsmenu.columns[self.colindex].x
-        local colw = config.controlsmenu.columns[self.colindex].w
-        love.graphics.rectangle("fill", colx, y, colw, c.rows.h)
-        love.graphics.setColor(1,1,1,1)
+        if self.edit then
+            love.graphics.setColor(cm.colours.edit)
+        else            
+            love.graphics.setColor(cm.colours.cell)
+        end
 
+        love.graphics.rectangle("fill", cm.columns[self.colindex].x, y, cm.columns[self.colindex].w, cm.rows.h)        
     else
-        love.graphics.draw(self.indicator, c.menuoptions[self.index - c.rows.count].x1, c.menuoptions[self.index - c.rows.count].y)
-        love.graphics.draw(self.indicator, c.menuoptions[self.index - c.rows.count].x2, c.menuoptions[self.index - c.rows.count].y)
+        love.graphics.draw(self.indicator, cm.menuoptions[self.index - cm.rows.count].x1, cm.menuoptions[self.index - cm.rows.count].y)
+        love.graphics.draw(self.indicator, cm.menuoptions[self.index - cm.rows.count].x2, cm.menuoptions[self.index - cm.rows.count].y)
     end
 
     -- draw the key labels
-    love.graphics.setColor(0,0,0,1)
-    love.graphics.print("Up", c.columns[1].x, c.rows.y)
-    love.graphics.print("Down", c.columns[1].x, c.rows.y + c.rows.h * 1)
-    love.graphics.print("Left", c.columns[1].x, c.rows.y + c.rows.h * 2)
-    love.graphics.print("Right", c.columns[1].x, c.rows.y + c.rows.h * 3)
-    love.graphics.print("Jump", c.columns[1].x, c.rows.y + c.rows.h * 4)
-    love.graphics.print("Menu/Back", c.columns[1].x, c.rows.y + c.rows.h * 5)
-    love.graphics.print("Ok", c.columns[1].x, c.rows.y + c.rows.h * 6)
+    love.graphics.setColor(cm.colours.text)
 
-    -- keyboard
-    love.graphics.print(config.controls.kb.up, c.columns[2].x, c.rows.y)
-    love.graphics.print(config.controls.kb.down, c.columns[2].x, c.rows.y + c.rows.h * 1)
-    love.graphics.print(config.controls.kb.left, c.columns[2].x, c.rows.y + c.rows.h * 2)
-    love.graphics.print(config.controls.kb.right, c.columns[2].x, c.rows.y + c.rows.h * 3)
-    love.graphics.print(config.controls.kb.jump, c.columns[2].x, c.rows.y + c.rows.h * 4)
-    love.graphics.print(config.controls.kb.menu, c.columns[2].x, c.rows.y + c.rows.h * 5)
-    love.graphics.print(config.controls.kb.ok, c.columns[2].x, c.rows.y + c.rows.h * 6)
-    
-    -- mouse
-    -- love.graphics.print(config.controls.kb.up, c.columns[3].x, c.rows.y)
-    -- love.graphics.print(config.controls.kb.down, c.columns[3].x, c.rows.y + c.rows.h * 1)
-    -- love.graphics.print(config.controls.kb.left, c.columns[3].x, c.rows.y + c.rows.h * 2)
-    -- love.graphics.print(config.controls.kb.right, c.columns[3].x, c.rows.y + c.rows.h * 3)
-    -- love.graphics.print(config.controls.kb.jump, c.columns[3].x, c.rows.y + c.rows.h * 4)
-    -- love.graphics.print(config.controls.kb.menu, c.columns[3].x, c.rows.y + c.rows.h * 5)
-    love.graphics.print(config.controls.mouse.ok, c.columns[3].x, c.rows.y + c.rows.h * 6)
-
-    -- gamepads
-    for i, v in ipairs(config.controls.gamepad) do
-        love.graphics.print(v.up, c.columns[3+i].x, c.rows.y)
-        love.graphics.print(v.down, c.columns[3+i].x, c.rows.y + c.rows.h * 1)
-        love.graphics.print(v.left, c.columns[3+i].x, c.rows.y + c.rows.h * 2)
-        love.graphics.print(v.right, c.columns[3+i].x, c.rows.y + c.rows.h * 3)
-        love.graphics.print(v.jump, c.columns[3+i].x, c.rows.y + c.rows.h * 4)
-        love.graphics.print(v.menu, c.columns[3+i].x, c.rows.y + c.rows.h * 5)
-        love.graphics.print(v.ok, c.columns[3+i].x, c.rows.y + c.rows.h * 6)    
+    -- draw the controls
+    for i=1, #cc do
+        for j=1, #cc[1] do
+            if cc[i][j] then
+                love.graphics.print(cc[i][j], cm.columns[i].x, cm.rows.y + cm.rows.h * (j-1))
+            end
+        end
     end
-
 
     love.graphics.setColor(1,1,1,1)
 
-    love.graphics.rectangle("line", c.panel.x, c.panel.y, c.panel.w, c.panel.h)
+    -- draw rectangle around controls
+    love.graphics.rectangle("line", cm.panel.x, cm.panel.y, cm.panel.w, cm.panel.h)
 end
 
 function controlsmenu:keypressed(key)
-    if key == config.controls.kb.down then
-        self.index = self.index + 1
-        if self.index > config.controlsmenu.rows.count + #config.controlsmenu.menuoptions then
-            self.index = 1
-        end
-    elseif key == config.controls.kb.up then
-        self.index = self.index - 1
-        if self.index < 1 then
-            self.index = config.controlsmenu.rows.count + #config.controlsmenu.menuoptions
-        end
-    elseif key == config.controls.kb.left then
-        -- uncomment when more than one option
-        self.colindex = self.colindex - 1
-        if self.colindex < 2 then
-            self.colindex = #config.controlsmenu.columns
-        end
-    elseif key == config.controls.kb.right then
-        -- uncomment when more than one option
-        self.colindex = self.colindex + 1
-        if self.colindex > #config.controlsmenu.columns then
-            self.colindex = 2
-        end
+    -- references to reduce typing!
+    local cm = config.controlsmenu
+    local cc = config.controls
+    local ci = config.controlindex
 
-    elseif key == config.controls.kb.menu then
-        -- return to game
-        menu = "options"
-    elseif key == config.controls.kb.ok then
-        if self.index == config.controlsmenu.rows.count + #config.controlsmenu.menuoptions then
-            -- return to main menu
+    -- in edit mode or not
+    if self.edit then
+        -- set the key and get out of edit mode
+        cc[self.colindex][self.index] = key
+        self.edit = false
+    else
+        -- do the key action
+        if key == cc[ci.kb][ci.down] then
+            self.index = self.index + 1
+            if self.index > cm.rows.count + #cm.menuoptions then
+                self.index = 1
+            end
+        elseif key == cc[ci.kb][ci.up] then
+            self.index = self.index - 1
+            if self.index < 1 then
+                self.index = cm.rows.count + #cm.menuoptions
+            end
+        elseif key == cc[ci.kb][ci.left] then
+            -- uncomment when more than one option
+            self.colindex = self.colindex - 1
+            if self.colindex < 2 then
+                self.colindex = #cm.columns
+            end
+        elseif key == cc[ci.kb][ci.right] then
+            -- uncomment when more than one option
+            self.colindex = self.colindex + 1
+            if self.colindex > #cm.columns then
+                self.colindex = 2
+            end
+
+        elseif key == cc[ci.kb][ci.menu] then
+            -- return to game
             menu = "options"
-        elseif self.index <= config.controlsmenu.rows.count then
-            -- process row/col change
+        elseif key == cc[ci.kb][ci.ok] then
+            if self.index == cm.rows.count + #cm.menuoptions then
+                -- return to main menu
+                menu = "options"
+            elseif self.index <= cm.rows.count then
+                -- process row/col change
+                if not self.edit then
+                    self.edit = true                
+                end
+            end
         end
     end
 end

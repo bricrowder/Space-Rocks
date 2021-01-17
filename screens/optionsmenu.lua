@@ -43,17 +43,21 @@ function optionsmenu:draw()
 end
 
 function optionsmenu:keypressed(key)
-    if key == "down" then
+
+    local cc = config.controls
+    local ci = config.controlindex
+
+    if key == cc[ci.kb][ci.down] then
         self.index = self.index + 1
         if self.index > #config.optionsmenu.menuoptions then
             self.index = 1
         end
-    elseif key == "up" then
+    elseif key == cc[ci.kb][ci.up] then
         self.index = self.index - 1
         if self.index < 1 then
             self.index = #config.optionsmenu.menuoptions
         end
-    elseif self.index == 1 and key == "left" then
+    elseif self.index == 1 and key == cc[ci.kb][ci.left] then
         -- window minus
         config.game.scale = config.game.scale - config.optionsmenu.sizeinc
         if config.game.scale < 1 then
@@ -64,7 +68,7 @@ function optionsmenu:keypressed(key)
 
         resetVirtualCanvas()
 
-    elseif self.index == 1 and key == "right" then
+    elseif self.index == 1 and key == cc[ci.kb][ci.right] then
         -- window plus
         config.game.scale = config.game.scale + config.optionsmenu.sizeinc
         if config.game.scale > 2 then
@@ -75,7 +79,7 @@ function optionsmenu:keypressed(key)
 
         resetVirtualCanvas()
 
-    elseif self.index == 2 and key == "left" then
+    elseif self.index == 2 and key == cc[ci.kb][ci.left] then
         -- volume down
         config.sounds.volume = config.sounds.volume - 0.1
         if config.sounds.volume < 0 then
@@ -86,7 +90,7 @@ function optionsmenu:keypressed(key)
 
         love.audio.setVolume(config.sounds.volume)
 
-    elseif self.index == 2 and key == "right" then
+    elseif self.index == 2 and key == cc[ci.kb][ci.right] then
         -- volume up
         config.sounds.volume = config.sounds.volume + 0.1
         if config.sounds.volume > 1 then
@@ -98,7 +102,7 @@ function optionsmenu:keypressed(key)
 
         love.audio.setVolume(config.sounds.volume)
 
-    elseif key == "space" then
+    elseif key == cc[ci.kb][ci.ok] then
         if self.index == 3 then
             -- controls menu
             menu = "controls"
@@ -106,7 +110,7 @@ function optionsmenu:keypressed(key)
             -- main menu
             menu = "main"
         end
-    elseif key == "escape" then
+    elseif key == cc[ci.kb][ci.menu] then
         -- main menu
         menu = "main"
     end
