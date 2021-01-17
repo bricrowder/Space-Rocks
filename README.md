@@ -1,8 +1,8 @@
 # Space-Rocks
 
 ## In Progress:
+- Saving the configuration after you have changed it
 - Gamepad detection
-- Control settings
 - Example endgame menu/screen
 - Example game
 
