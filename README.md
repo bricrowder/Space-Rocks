@@ -2,7 +2,6 @@
 
 ## In Progress:
 - Saving the configuration after you have changed it
-- Gamepad detection
 - Example endgame menu/screen
 - Example game
 
@@ -11,3 +10,5 @@
 - Menus: Main menu, options, controls, pause
 - Settings: Volume Control and Resolution size
 
+## For a later time:
+- Multiple players
