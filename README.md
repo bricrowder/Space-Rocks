@@ -1,8 +1,9 @@
 # Space-Rocks
 
 ## In Progress:
-- Gamepad detection
-- Control settings
+- Saving the configuration after you have changed it
+- Controls: Mappable keyboard, mouse and gamepad buttons
+- Splash Screen
 - Example endgame menu/screen
 - Example game
 
@@ -11,3 +12,5 @@
 - Menus: Main menu, options, controls, pause
 - Settings: Volume Control and Resolution size
 
+## For a later time:
+- Multiple players
