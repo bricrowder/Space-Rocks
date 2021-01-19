@@ -69,7 +69,7 @@ function controlsmenu:draw()
     love.graphics.rectangle("line", cm.panel.x, cm.panel.y, cm.panel.w, cm.panel.h)
 end
 
-function controlsmenu:keypressed(key)
+function controlsmenu:keypressed(key, button)
     -- references to reduce typing!
     local cm = config.controlsmenu
     local cc = config.controls
@@ -77,8 +77,13 @@ function controlsmenu:keypressed(key)
 
     -- in edit mode or not
     if self.edit then
-        -- set the key and get out of edit mode
-        cc[self.colindex][self.index] = key
+        -- set the key, if the key/button is for the current device then get out of edit mode
+        if self.colindex == config.controlindex.gamepad and button then
+            cc[self.colindex][self.index] = button
+        elseif self.colindex == config.controlindex.kb and key then
+            cc[self.colindex][self.index] = key
+        end
+        
         self.edit = false
     else
         -- do the key action
@@ -120,6 +125,10 @@ function controlsmenu:keypressed(key)
             end
         end
     end
+end
+
+function controlsmenu:mousepressed(x, y, button)
+    
 end
 
 return controlsmenu

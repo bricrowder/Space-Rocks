@@ -19,6 +19,7 @@ game = false        -- if game is playing or not, it is the menu otherwise reall
 menu = "main"     -- the non-game menu you are on
 paused = false      -- if the game is paused or not
 endgame = false     -- if the game has ended
+splash = true       -- if the splash screen is on
 
 -- debug flag
 debugstats = true
@@ -29,8 +30,6 @@ debugfont = love.graphics.newFont(12)
 -- Audio files
 menubip = love.audio.newSource(config.sounds.menubip, "static")
 
--- gamepad/joysticks - 1 to 4
-gamepads = {nil, nil, nil, nil}
 
 --[[
     LOAD ALL OTHER GLOBAL VARIABLES AND MODULES HERE
@@ -79,6 +78,9 @@ function love.update(dt)
             controlsmenu:update(dt)
         end
     end
+
+    -- reset the gamepad flag
+    gamepad = false
 end
 
 function love.draw()
@@ -181,17 +183,91 @@ end
 function love.gamepadpressed(js, button)
     local key = nil
     
-    -- find button in gamepad #1 control settings
-    -- gotta figure out how to do multiple players
-    for i, v in ipairs(config.controls[4]) do
+    -- find button in gamepad #1 control settings and map to kb equivalent
+    for i, v in ipairs(config.controls[config.controlindex.gamepad]) do
         if button == v then
             key = config.controls[config.controlindex.kb][i]
         end
     end
-    print(button .. " --> " .. key)
-    love.keypressed(key)
+
+    -- pass the mapped control to the keypress funtion
+    if game then
+        -- game code regardless of pausing
+        if not paused then
+            if button == config.controls[config.controlindex.gamepad][config.controlindex.menu] then
+                paused = true
+            end
+            -- game code
+        else
+            -- if game is paused
+            love.audio.play(menubip)
+            if menu == "options" then
+                optionsmenu:keypressed(key)
+            elseif menu == "controls" then
+                controlsmenu:keypressed(key, button)
+            else
+                pausemenu:keypressed(key)
+            end
+
+        end
+
+        if endgame then
+            -- if the game has ended (but not back in menu yet)
+        end
+    else
+        -- play menu moving sound
+        
+        love.audio.play(menubip)
+        -- menu code
+        if menu == "main" then
+            mainmenu:keypressed(key)
+        elseif menu == "options" then 
+            optionsmenu:keypressed(key)
+        elseif menu == "controls" then 
+            controlsmenu:keypressed(key, button)
+        end
+    end
 end
 
+function love.mousepressed(button)
+
+    if game then
+        -- game code regardless of pausing
+        if not paused then
+            if key == "escape" then
+                paused = true
+            end
+            -- game code
+        else
+            -- if game is paused
+            love.audio.play(menubip)
+            if menu == "options" then
+                -- optionsmenu:keypressed(key)
+            elseif menu == "controls" then
+                controlsmenu:mousepressed(x, y, button)
+            else
+                -- pausemenu:keypressed(key)
+            end
+
+        end
+
+        if endgame then
+            -- if the game has ended (but not back in menu yet)
+        end
+    else
+        -- play menu moving sound
+        
+        love.audio.play(menubip)
+        -- menu code
+        if menu == "main" then
+            -- mainmenu:keypressed(key)
+        elseif menu == "options" then 
+            -- optionsmenu:keypressed(key)
+        elseif menu == "controls" then 
+            controlsmenu:mousepressed(x, y, button)
+        end
+    end
+end
 
 function love.joystickadded(js)
     print("added: " .. js:getName())

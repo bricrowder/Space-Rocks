@@ -114,35 +114,19 @@
                 "w":48
             },
             {
-                "x":192,
+                "x":224,
                 "w":48
             },
             {
-                "x":240,
-                "w":48
-            },
-            {
-                "x":288,
-                "w":48
-            },
-            {
-                "x":336,
-                "w":48
-            },
-            {
-                "x":384,
+                "x":304,
                 "w":48
             }
-
         ]
     },
     "controlindex":{
         "kb":2,
         "mouse":3,
-        "gamepad1":4,
-        "gamepad2":5,
-        "gamepad3":6,
-        "gamepad4":7,
+        "gamepad":4,
         "up":1,
         "down":2,
         "left":3,
@@ -155,9 +139,6 @@
         ["Up","Down","Left","Right","Jump","Menu/Back","Ok"],
         ["w","s","a","d","space","escape","space"],
         [null,null,null,null,null,null,null],
-        ["dpup","dpdown","dpleft","dpright","a","start","a"],
-        ["dpup","dpdown","dpleft","dpright","a","start","a"],
-        ["dpup","dpdown","dpleft","dpright","a","start","a"],
         ["dpup","dpdown","dpleft","dpright","a","start","a"]
     ]
 }
