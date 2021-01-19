@@ -2,7 +2,6 @@
 
 ## In Progress:
 - Saving the configuration after you have changed it
-- Controls: Mappable keyboard, mouse and gamepad buttons
 - Splash Screen
 - Example endgame menu/screen
 - Example game
@@ -11,6 +10,8 @@
 - Overall game logic / framework
 - Menus: Main menu, options, controls, pause
 - Settings: Volume Control and Resolution size
+- Controls: Mappable keyboard and gamepad buttons
 
 ## For a later time:
 - Multiple players
+- mouse control mapping
