@@ -2,10 +2,6 @@
 
 ## In Progress:
 - Saving the configuration after you have changed it
-<<<<<<< HEAD
-=======
-- Splash Screen
->>>>>>> 6377682c7199b8612a5116d3fb37d914c8169ab2
 - Example endgame menu/screen
 
 ## Complete:
