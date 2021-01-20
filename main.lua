@@ -13,13 +13,13 @@ mainmenu = require ("screens/mainmenu").init()
 pausemenu = require ("screens/pausemenu").init()
 optionsmenu = require ("screens/optionsmenu").init()
 controlsmenu = require ("screens/controlsmenu").init()
+splash = require ("screens/splash").init()
 
 -- initialize global game state variables
 game = false        -- if game is playing or not, it is the menu otherwise really...
-menu = "main"     -- the non-game menu you are on
+menu = "splash"     -- the non-game menu you are on
 paused = false      -- if the game is paused or not
 endgame = false     -- if the game has ended
-splash = true       -- if the splash screen is on
 
 -- debug flag
 debugstats = true
@@ -50,7 +50,9 @@ function love.update(dt)
     if game then
         -- game code regardless of pausing
 
-        if not paused then
+        if endgame then
+
+        elseif not paused then
             -- game code
 
         else
@@ -63,11 +65,6 @@ function love.update(dt)
                 pausemenu:update(dt)
             end
         end
-
-        if endgame then
-            -- if the game has ended (but not back in menu yet)
-
-        end
     else
         -- menu code
         if menu == "main" then
@@ -76,6 +73,8 @@ function love.update(dt)
             optionsmenu:update(dt)
         elseif menu == "controls" then
             controlsmenu:update(dt)
+        elseif menu == "splash" then
+            splash:update(dt)
         end
     end
 
@@ -91,9 +90,12 @@ function love.draw()
     if game then
         -- game code regardless of pausing
 
-        if not paused then
+        if endgame then
+            -- if the game has ended (but not back in menu yet)
+            love.graphics.print("Press any key to return to the main menu", nativeCanvas:getWidth()/2 - 40, nativeCanvas:getHeight()/2)
+        elseif not paused then
             -- game code
-            love.graphics.print("Press Escape to Quit", nativeCanvas:getWidth()/2 - 20, nativeCanvas:getHeight()/2)
+            love.graphics.print("Press Escape to Pause\nq to end game", nativeCanvas:getWidth()/2 - 40, nativeCanvas:getHeight()/2)
         else
             -- if game is paused
             if menu == "options" then
@@ -104,10 +106,6 @@ function love.draw()
                 pausemenu:draw()
             end
         end
-
-        if endgame then
-            -- if the game has ended (but not back in menu yet)
-        end
     else
         -- menu code
         if menu == "main" then
@@ -116,6 +114,8 @@ function love.draw()
             optionsmenu:draw()
         elseif menu == "controls" then
             controlsmenu:draw()
+        elseif menu == "splash" then
+            splash:draw()            
         end
     end
 
@@ -143,10 +143,22 @@ end
 function love.keypressed(key)
     if game then
         -- game code regardless of pausing
-        if not paused then
-            if key == "escape" then
+        if endgame then
+            -- if the game has ended (but not back in menu yet)
+            game = false
+            menu = "main"
+            endgame = false
+            pause = false
+        elseif not paused then
+            if key == config.controls[config.controlindex.kb][config.controlindex.menu] then
                 paused = true
             end
+
+            -- temp for end state demo --> this will simulate an end game state
+            if key == "q" then
+                endgame = true
+                return -- this is just for the demo -> you will want to adjust this logic... 
+            end            
             -- game code
         else
             -- if game is paused
@@ -160,10 +172,6 @@ function love.keypressed(key)
             end
 
         end
-
-        if endgame then
-            -- if the game has ended (but not back in menu yet)
-        end
     else
         -- play menu moving sound
         
@@ -175,6 +183,8 @@ function love.keypressed(key)
             optionsmenu:keypressed(key)
         elseif menu == "controls" then 
             controlsmenu:keypressed(key)
+        elseif menu == "splash" then
+            splash:keypressed(key)
         end
     end
 end
@@ -193,10 +203,17 @@ function love.gamepadpressed(js, button)
     -- pass the mapped control to the keypress funtion
     if game then
         -- game code regardless of pausing
-        if not paused then
+        if endgame then
+            -- if the game has ended (but not back in menu yet)
+            game = false
+            menu = "main"
+            endgame = false
+            pause = false            
+        elseif not paused then
             if button == config.controls[config.controlindex.gamepad][config.controlindex.menu] then
                 paused = true
             end
+
             -- game code
         else
             -- if game is paused
@@ -211,9 +228,7 @@ function love.gamepadpressed(js, button)
 
         end
 
-        if endgame then
-            -- if the game has ended (but not back in menu yet)
-        end
+
     else
         -- play menu moving sound
         
@@ -225,6 +240,8 @@ function love.gamepadpressed(js, button)
             optionsmenu:keypressed(key)
         elseif menu == "controls" then 
             controlsmenu:keypressed(key, button)
+        elseif menu == "splash" then
+            splash:keypressed(key)            
         end
     end
 end
@@ -233,7 +250,9 @@ function love.mousepressed(button)
 
     if game then
         -- game code regardless of pausing
-        if not paused then
+        if endgame then
+
+        elseif not paused then
             if key == "escape" then
                 paused = true
             end
@@ -249,10 +268,6 @@ function love.mousepressed(button)
                 -- pausemenu:keypressed(key)
             end
 
-        end
-
-        if endgame then
-            -- if the game has ended (but not back in menu yet)
         end
     else
         -- play menu moving sound

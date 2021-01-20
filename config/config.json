@@ -8,6 +8,10 @@
         "volume":0.5,
         "menubip":"assets/menubip.wav"
     },
+    "splash":{
+        "background":"assets/splash.png",
+        "duration":5
+    },
     "mainmenu":{
         "background":"assets/mainmenu.png",
         "indicator":"assets/menuindicator.png",
