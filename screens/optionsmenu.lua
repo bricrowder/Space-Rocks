@@ -67,6 +67,7 @@ function optionsmenu:keypressed(key)
         self.offset.size = (config.game.scale-1)/config.optionsmenu.sizeinc * config.optionsmenu.pixelinc
 
         resetVirtualCanvas()
+        saveConfig()
 
     elseif self.index == 1 and key == cc[ci.kb][ci.right] then
         -- window plus
@@ -78,6 +79,7 @@ function optionsmenu:keypressed(key)
         self.offset.size = (config.game.scale-1)/config.optionsmenu.sizeinc * config.optionsmenu.pixelinc
 
         resetVirtualCanvas()
+        saveConfig()
 
     elseif self.index == 2 and key == cc[ci.kb][ci.left] then
         -- volume down
@@ -89,6 +91,7 @@ function optionsmenu:keypressed(key)
         self.angle = (math.pi - math.pi/8) + math.pi/8 * config.sounds.volume * 10
 
         love.audio.setVolume(config.sounds.volume)
+        saveConfig()
 
     elseif self.index == 2 and key == cc[ci.kb][ci.right] then
         -- volume up
@@ -101,7 +104,8 @@ function optionsmenu:keypressed(key)
         self.angle = (math.pi - math.pi/8) + math.pi/8 * config.sounds.volume*10
 
         love.audio.setVolume(config.sounds.volume)
-
+        saveConfig()
+        
     elseif key == cc[ci.kb][ci.ok] then
         if self.index == 3 then
             -- controls menu

@@ -1,14 +1,14 @@
 # Space-Rocks
 
 ## In Progress:
-- Saving the configuration after you have changed it
-- Example endgame menu/screen
+- Nothing specific, going to futher enhance and optimize this over time.
 
 ## Complete:
 - Overall game logic / framework
-- Menus/screens: Main menu, options, controls, pause, splash screen
+- Menus/screens: Main menu, options, controls, pause, splash screen, end game
 - Settings: Volume Control and Resolution size
 - Controls: Mappable keyboard and gamepad buttons
+- Save the configuration, load defaults if no saved config
 
 ## For a later time:
 - Multiple players

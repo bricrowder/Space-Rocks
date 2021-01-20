@@ -2,7 +2,7 @@
 json = require ("external/dkjson")
 
 -- load the configuration
-config = json.opendecode("config/config.json")
+config = json.opendecode("config.json")
 
 -- the two main drawing canvases
 nativeCanvas = love.graphics.newCanvas(config.game.width, config.game.height)
@@ -158,7 +158,7 @@ function love.keypressed(key)
             if key == "q" then
                 endgame = true
                 return -- this is just for the demo -> you will want to adjust this logic... 
-            end            
+            end
             -- game code
         else
             -- if game is paused
@@ -295,4 +295,16 @@ end
 function resetVirtualCanvas()
     virtualCanvas = love.graphics.newCanvas(config.game.width * config.game.scale, config.game.height * config.game.scale)
     love.window.setMode(virtualCanvas:getWidth(), virtualCanvas:getHeight())
+end
+
+function saveConfig()
+    -- generate json and save
+    local str = json.encode(config, {indent = true})
+    print(str)
+    local ok, msg = love.filesystem.write("config.json", str)
+    if not(ok) then
+        print("error: " .. msg)
+    else
+        print("saved")
+    end      
 end

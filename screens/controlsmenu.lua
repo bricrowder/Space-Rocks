@@ -85,6 +85,8 @@ function controlsmenu:keypressed(key, button)
         end
         
         self.edit = false
+
+        saveConfig()
     else
         -- do the key action
         if key == cc[ci.kb][ci.down] then
