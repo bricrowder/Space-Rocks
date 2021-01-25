@@ -43,7 +43,7 @@ function mainmenu:keypressed(key)
     elseif key == cc[ci.kb][ci.ok] then
         if self.index == 1 then
             -- new game
-            game = true
+            gamerunning = true
         elseif self.index == 2 then
             -- options menu (and reset index)
             menu = "options"

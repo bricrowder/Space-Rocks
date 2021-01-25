@@ -52,7 +52,7 @@ function pausemenu:keypressed(key)
             menu = "options"
         elseif self.index == 3 then
             -- quit - main menu, reset game
-            game = false
+            gamerunning = false
             paused = false
             menu = "main"
         end

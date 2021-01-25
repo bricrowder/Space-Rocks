@@ -15,9 +15,13 @@ optionsmenu = require ("screens/optionsmenu").init()
 controlsmenu = require ("screens/controlsmenu").init()
 splash = require ("screens/splash").init()
 
+-- load the main game module and any others...
+game = require ("game/game").init()
+
+
 -- initialize global game state variables
-game = false        -- if game is playing or not, it is the menu otherwise really...
-menu = "splash"     -- the non-game menu you are on
+gamerunning = false        -- if game is playing or not, it is the menu otherwise really...
+menu = "splash"     -- the non-game menu/screen you are on
 paused = false      -- if the game is paused or not
 endgame = false     -- if the game has ended
 
@@ -29,11 +33,6 @@ debugfont = love.graphics.newFont(12)
 
 -- Audio files
 menubip = love.audio.newSource(config.sounds.menubip, "static")
-
-
---[[
-    LOAD ALL OTHER GLOBAL VARIABLES AND MODULES HERE
-]]
 
 function love.load()
     -- set the resolution from the configuration
@@ -47,16 +46,16 @@ function love.load()
 end
 
 function love.update(dt)
-    if game then
+    if gamerunning then
         -- game code regardless of pausing
 
         if endgame then
-
+            -- endgame code before going back to main menu
         elseif not paused then
             -- game code
-
+            game:update(dt)
         else
-            -- if game is paused
+            -- if game is paused, pass to appropriate menu
             if menu == "options" then
                 optionsmenu:update(dt)
             elseif menu == "controls" then
@@ -66,7 +65,7 @@ function love.update(dt)
             end
         end
     else
-        -- menu code
+        -- pass to appropriate menu
         if menu == "main" then
             mainmenu:update(dt)
         elseif menu == "options" then
@@ -78,8 +77,6 @@ function love.update(dt)
         end
     end
 
-    -- reset the gamepad flag
-    gamepad = false
 end
 
 function love.draw()
@@ -87,17 +84,17 @@ function love.draw()
     love.graphics.setCanvas(nativeCanvas)
     love.graphics.clear()
 
-    if game then
+    if gamerunning then
         -- game code regardless of pausing
 
         if endgame then
-            -- if the game has ended (but not back in menu yet)
+            -- endgame code before going back to main menu
             love.graphics.print("Press any key to return to the main menu", nativeCanvas:getWidth()/2 - 40, nativeCanvas:getHeight()/2)
         elseif not paused then
-            -- game code
-            love.graphics.print("Press Escape to Pause\nq to end game", nativeCanvas:getWidth()/2 - 40, nativeCanvas:getHeight()/2)
+            -- game code, draw at native resolution
+            game:draw()
         else
-            -- if game is paused
+            -- if game is paused, pass to appropriate menu
             if menu == "options" then
                 optionsmenu:draw()
             elseif menu == "controls" then
@@ -107,7 +104,7 @@ function love.draw()
             end
         end
     else
-        -- menu code
+        -- pass to appropriate menu
         if menu == "main" then
             mainmenu:draw()
         elseif menu == "options" then
@@ -119,13 +116,14 @@ function love.draw()
         end
     end
 
-    -- draw the native canvas to the virtual canvas (using the scale)
+    -- draw the native canvas to the virtual canvas at the game scale
     love.graphics.setCanvas(virtualCanvas)
     love.graphics.clear()
-
     love.graphics.draw(nativeCanvas, 0, 0, 0, config.game.scale, config.game.scale)
 
-    -- apply anything else to the virtual canvas (such as UI or shaders)
+
+    -- apply anything else to the virtual canvas (such as UI @ virtual resolution or shaders)
+
 
     -- set back to screen for final drawing
     love.graphics.setCanvas()
@@ -141,10 +139,10 @@ end
 
 -- handle keyboard events
 function love.keypressed(key)
-    if game then
+    if gamerunning then
         -- game code regardless of pausing
         if endgame then
-            -- if the game has ended (but not back in menu yet)
+            -- endgame code before going back to main menu
             game = false
             menu = "main"
             endgame = false
@@ -152,16 +150,11 @@ function love.keypressed(key)
         elseif not paused then
             if key == config.controls[config.controlindex.kb][config.controlindex.menu] then
                 paused = true
+            else
+                game:keypressed(key)
             end
-
-            -- temp for end state demo --> this will simulate an end game state
-            if key == "q" then
-                endgame = true
-                return -- this is just for the demo -> you will want to adjust this logic... 
-            end
-            -- game code
         else
-            -- if game is paused
+            -- if game is paused, pass to appropriate menu
             love.audio.play(menubip)
             if menu == "options" then
                 optionsmenu:keypressed(key)
@@ -173,10 +166,10 @@ function love.keypressed(key)
 
         end
     else
-        -- play menu moving sound
-        
+        -- play menu moving sound        
         love.audio.play(menubip)
-        -- menu code
+
+            -- pass to appropriate menu
         if menu == "main" then
             mainmenu:keypressed(key)
         elseif menu == "options" then 
@@ -201,10 +194,10 @@ function love.gamepadpressed(js, button)
     end
 
     -- pass the mapped control to the keypress funtion
-    if game then
+    if gamerunning then
         -- game code regardless of pausing
         if endgame then
-            -- if the game has ended (but not back in menu yet)
+            -- endgame code before going back to main menu
             game = false
             menu = "main"
             endgame = false
@@ -215,8 +208,9 @@ function love.gamepadpressed(js, button)
             end
 
             -- game code
+
         else
-            -- if game is paused
+            -- if game is paused, pass to appropriate menu
             love.audio.play(menubip)
             if menu == "options" then
                 optionsmenu:keypressed(key)
@@ -225,15 +219,12 @@ function love.gamepadpressed(js, button)
             else
                 pausemenu:keypressed(key)
             end
-
         end
-
-
     else
-        -- play menu moving sound
-        
+        -- play menu moving sound        
         love.audio.play(menubip)
-        -- menu code
+
+        -- pass to appropriate menu
         if menu == "main" then
             mainmenu:keypressed(key)
         elseif menu == "options" then 
@@ -246,59 +237,14 @@ function love.gamepadpressed(js, button)
     end
 end
 
-function love.mousepressed(button)
-
-    if game then
-        -- game code regardless of pausing
-        if endgame then
-
-        elseif not paused then
-            if key == "escape" then
-                paused = true
-            end
-            -- game code
-        else
-            -- if game is paused
-            love.audio.play(menubip)
-            if menu == "options" then
-                -- optionsmenu:keypressed(key)
-            elseif menu == "controls" then
-                controlsmenu:mousepressed(x, y, button)
-            else
-                -- pausemenu:keypressed(key)
-            end
-
-        end
-    else
-        -- play menu moving sound
-        
-        love.audio.play(menubip)
-        -- menu code
-        if menu == "main" then
-            -- mainmenu:keypressed(key)
-        elseif menu == "options" then 
-            -- optionsmenu:keypressed(key)
-        elseif menu == "controls" then 
-            controlsmenu:mousepressed(x, y, button)
-        end
-    end
-end
-
-function love.joystickadded(js)
-    print("added: " .. js:getName())
-end
-
-function love.joystickremoved(js)
-    print("removed: " .. js:getName())    
-end
-
+-- change the resolution
 function resetVirtualCanvas()
     virtualCanvas = love.graphics.newCanvas(config.game.width * config.game.scale, config.game.height * config.game.scale)
     love.window.setMode(virtualCanvas:getWidth(), virtualCanvas:getHeight())
 end
 
+-- generate json and save, will save in default Love location
 function saveConfig()
-    -- generate json and save
     local str = json.encode(config, {indent = true})
     print(str)
     local ok, msg = love.filesystem.write("config.json", str)
